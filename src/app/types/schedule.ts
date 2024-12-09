@@ -5,6 +5,7 @@ export interface Task {
   hours: string;
   break: string;
   cost: string;
+  day: string;
   type: "task" | "break";
 }
 

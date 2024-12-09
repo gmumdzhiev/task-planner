@@ -16,10 +16,14 @@ export const ScheduleGrid = ({ data }: ScheduleGridProps) => {
         </div>
         <WeekSchedule week={data.week} />
       </div>
-
       <div className="flex flex-col">
-        {data.employees.map((employee) => (
-          <EmployeeRow key={employee.id} employee={employee} />
+        {data.employees.map((employee, empIndex) => (
+          <EmployeeRow
+            key={employee.id}
+            employee={employee}
+            employeeIndex={empIndex}
+            week={data.week}
+          />
         ))}
       </div>
     </div>

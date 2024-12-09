@@ -10,11 +10,12 @@ export const scheduleData: ScheduleData = {
       tasks: [
         {
           id: "1",
-          time: "7:00-15:00",
+          time: "07:00-15:00",
           label: "Cashier",
           hours: "7h30",
-          break: "30",
+          break: "30m",
           cost: "99",
+          day: "Mon",
           type: "task",
         },
       ],
@@ -26,11 +27,12 @@ export const scheduleData: ScheduleData = {
       tasks: [
         {
           id: "3",
-          time: "8:00-17:00",
+          time: "08:00-17:00",
           label: "Stock",
           hours: "7h30",
-          break: "30",
+          break: "30m",
           cost: "128",
+          day: "Tue",
           type: "task",
         },
       ],
