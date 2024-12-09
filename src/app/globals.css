@@ -19,3 +19,8 @@ body {
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+.icon-size {
+  width: 0.75em;
+  height: 0.75em;
+}

@@ -60,7 +60,7 @@ export const DragDropContext = () => {
         <h1 className="text-3xl font-bold text-center mb-6 underline">
           Planning Screen
         </h1>
-        <div className="flex gap-6 overflow-x-auto">
+        <div className="flex gap-6">
           {isClient &&
             data.days.map((day) => (
               <DayColumn
