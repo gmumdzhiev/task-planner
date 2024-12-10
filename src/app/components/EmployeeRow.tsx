@@ -1,11 +1,17 @@
-import React from "react";
+"use client";
+
+import React, { useState } from "react";
 import { Employee, Task } from "../types/schedule";
 import { useDraggable, useDroppable } from "@dnd-kit/core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { ContextMenu } from "./ContextMenu";
 import {
   faClock,
   faPause,
   faMoneyBill,
+  faCopy,
+  faTrashAlt,
+  faBars,
 } from "@fortawesome/free-solid-svg-icons";
 
 interface EmployeeRowProps {
@@ -49,60 +55,107 @@ const DraggableTask = ({
   const { attributes, listeners, setNodeRef, transform } = useDraggable({
     id: `${employeeIndex}-${task.id}`,
   });
-
+  const [contextMenu, setContextMenu] = useState<{
+    x: number;
+    y: number;
+  } | null>(null);
+  const handleContextMenu = (event: React.MouseEvent) => {
+    event.preventDefault();
+    setContextMenu({ x: event.clientX, y: event.clientY });
+  };
+  const closeContextMenu = () => {
+    setContextMenu(null);
+  };
   const style = {
     transform: transform
       ? `translate(${transform.x}px, ${transform.y}px)`
       : undefined,
   };
-
+  const menuOptions = [
+    {
+      label: "Copy",
+      action: () => console.log("Copied"),
+      icon: faCopy,
+      color: "base",
+    },
+    {
+      label: "Create a contract",
+      action: () => console.log("Contract created"),
+      icon: faBars,
+      color: "base",
+    },
+    {
+      label: "Delete",
+      action: () => console.log("Deleted"),
+      icon: faTrashAlt,
+      color: "danger",
+    },
+  ];
   return (
-    <div ref={setNodeRef} {...attributes} {...listeners} style={style}>
+    <>
+      {" "}
       <div
-        key={task.id}
+        ref={setNodeRef}
+        {...attributes}
+        {...listeners}
+        style={style}
+        onContextMenu={handleContextMenu}
         className={`flex flex-col items-start w-full p-2 rounded-md shadow ${
           task.type === "break"
             ? "bg-yellow-100 text-yellow-600"
             : "bg-lime-200 text-green-600"
         }`}
       >
+        {" "}
         <span className="py-1 text-base font-semibold text-gray-700">
           {task.time}
-        </span>
+        </span>{" "}
         <div className="py-1 flex items-center gap-2">
+          {" "}
           <div className="flex items-center gap-1">
+            {" "}
             <FontAwesomeIcon
               icon={faClock}
               className="text-gray-500 icon-size"
-            />
+            />{" "}
             <span className="text-gray-500 text-xs font-medium">
               {task.hours}
-            </span>
-          </div>
+            </span>{" "}
+          </div>{" "}
           <div className="flex items-center gap-1">
+            {" "}
             <FontAwesomeIcon
               icon={faPause}
               className="text-gray-500 icon-size"
-            />
+            />{" "}
             <span className="text-gray-500 text-xs font-medium">
               {task.break}
-            </span>
-          </div>
+            </span>{" "}
+          </div>{" "}
           <div className="flex items-center gap-1">
+            {" "}
             <FontAwesomeIcon
               icon={faMoneyBill}
               className="text-gray-500 icon-size"
-            />
+            />{" "}
             <span className="text-gray-500 text-xs font-medium">
               {task.cost} €
-            </span>
-          </div>
-        </div>
+            </span>{" "}
+          </div>{" "}
+        </div>{" "}
         <span className="py-1 w-full text-xs font-semibold rounded-md shadow bg-lime-600 text-gray-700 px-2">
-          {task.label}
-        </span>
-      </div>
-    </div>
+          {" "}
+          {task.label}{" "}
+        </span>{" "}
+      </div>{" "}
+      {contextMenu && (
+        <ContextMenu
+          options={menuOptions}
+          position={contextMenu}
+          onClose={closeContextMenu}
+        />
+      )}{" "}
+    </>
   );
 };
 
