@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { WeekSchedule } from "./WeekSchedule";
 import { EmployeeRow } from "./EmployeeRow";
 import { ScheduleData } from "../types/schedule";
@@ -8,6 +8,12 @@ interface ScheduleGridProps {
 }
 
 export const ScheduleGrid = ({ data }: ScheduleGridProps) => {
+  const [openTaskId, setOpenTaskId] = useState<string | null>(null);
+
+  const handleContextMenuOpen = (taskId: string) => {
+    setOpenTaskId(taskId);
+  };
+
   return (
     <div className="bg-white border border-gray-200 rounded-lg shadow">
       <div className="grid grid-cols-8 bg-gray-50 shadow-md">
@@ -23,6 +29,8 @@ export const ScheduleGrid = ({ data }: ScheduleGridProps) => {
             employee={employee}
             employeeIndex={empIndex}
             week={data.week}
+            openTaskId={openTaskId}
+            onContextMenuOpen={handleContextMenuOpen}
           />
         ))}
       </div>
