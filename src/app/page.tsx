@@ -14,13 +14,19 @@ const SchedulePage = () => {
   const [modalEmployee, setModalEmployee] = useState<Employee | null>(null);
   const [modalDay, setModalDay] = useState<string | null>(null);
 
+  console.log(data);
+
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
 
     if (!over || active.id === over.id) return;
 
-    const [activeEmpIdx, activeTaskId] = String(active.id).split("-");
-    const [overEmpIdx, destDayIdxStr] = String(over.id).split("-");
+    const [activeEmpIdx, activeTaskId] = String(active.id)
+      .replace("draggable-", "")
+      .split("-");
+    const [overEmpIdx, destDayIdxStr] = String(over.id)
+      .replace("droppable-", "")
+      .split("-");
 
     const srcEmpIdx = parseInt(activeEmpIdx, 10);
     const destEmpIdx = parseInt(overEmpIdx, 10);
@@ -42,7 +48,7 @@ const SchedulePage = () => {
       const [movedTask] = srcEmployee.tasks.splice(taskIndex, 1);
       if (movedTask) {
         movedTask.day = data.week[destDayIdx];
-        destEmployee.tasks.push(movedTask);
+        destEmployee.tasks = [...destEmployee.tasks, movedTask];
       }
     }
 

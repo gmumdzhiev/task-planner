@@ -32,7 +32,7 @@ export const DraggableTask = ({
   onOpenModal,
 }: DraggableTaskProps) => {
   const { attributes, listeners, setNodeRef, transform } = useDraggable({
-    id: `${employeeIndex}-${task.id}`,
+    id: `draggable-${employeeIndex}-${task.id}`,
   });
   const [contextMenu, setContextMenu] = useState<{
     x: number;
@@ -41,12 +41,12 @@ export const DraggableTask = ({
 
   const handleContextMenu = (event: React.MouseEvent) => {
     event.preventDefault();
-    onContextMenuOpen(`${employeeIndex}-${task.id}`);
+    onContextMenuOpen(`draggable-${employeeIndex}-${task.id}`);
     setContextMenu({ x: event.clientX, y: event.clientY });
   };
 
   useEffect(() => {
-    if (openTaskId !== `${employeeIndex}-${task.id}`) {
+    if (openTaskId !== `draggable-${employeeIndex}-${task.id}`) {
       setContextMenu(null);
     }
   }, [openTaskId, employeeIndex, task.id]);
@@ -59,6 +59,7 @@ export const DraggableTask = ({
     transform: transform
       ? `translate(${transform.x}px, ${transform.y}px)`
       : undefined,
+    zIndex: 10,
   };
 
   const menuOptions = [

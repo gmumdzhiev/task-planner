@@ -1,7 +1,8 @@
 import React from "react";
 import { useDroppable } from "@dnd-kit/core";
-import { DraggableTask } from "./DraggableTasks";
+
 import { Task, Employee } from "../../../types/schedule";
+import { DraggableTask } from "./DraggableTask";
 
 interface DroppableAreaProps {
   employeeIndex: number;
@@ -28,7 +29,7 @@ export const DroppableArea = ({
   employee,
   day,
 }: DroppableAreaProps) => {
-  const { setNodeRef } = useDroppable({ id: `${employeeIndex}-${dayIndex}` });
+  const { setNodeRef } = useDroppable({ id: `droppable-${employeeIndex}-${dayIndex}` });
 
   const handleOpenModal = (event: React.MouseEvent) => {
     event.stopPropagation();
@@ -46,7 +47,7 @@ export const DroppableArea = ({
           <button className="text-gray-500 text-2xl">+</button>
         </div>
       )}
-      {tasks.map((task) => (
+      {tasks.map((task: Task) => (
         <DraggableTask
           key={task.id}
           task={task}

@@ -1,4 +1,3 @@
-"use client";
 import React from "react";
 import { Employee, Task } from "../../types/schedule";
 import { DroppableArea } from "./components/DroppableArea";

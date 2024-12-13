@@ -36,7 +36,11 @@ export const Modal = ({
   };
 
   return (
-    <div className="z-11 fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-end">
+    <div
+      style={{ zIndex: 11 }}
+      className="fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-end"
+      onClick={onClose}
+    >
       <div className="bg-white w-1/3 h-full p-4 shadow-lg">
         <button className="text-gray-500 hover:text-gray-700" onClick={onClose}>
           Cancel
