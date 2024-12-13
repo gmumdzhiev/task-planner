@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { WeekSchedule } from "./WeekSchedule";
-import { EmployeeRow } from "./EmployeeRow";
+import { EmployeeRow } from "./EmployeeRow/EmployeeRow";
 import { ScheduleData, Task, Employee } from "../types/schedule";
 
 interface ScheduleGridProps {
