@@ -5,7 +5,7 @@ import { DndContext, DragEndEvent } from "@dnd-kit/core";
 import { ScheduleGrid } from "./components/ScheduleGrid";
 import { scheduleData } from "./data/schedule";
 import { ScheduleData, Employee, Task } from "./types/schedule";
-import { Modal } from "./components/Modal";
+import { Modal } from "./components/Modal/Modal";
 
 const SchedulePage = () => {
   const [data, setData] = useState<ScheduleData>(scheduleData);
@@ -19,8 +19,12 @@ const SchedulePage = () => {
 
     if (!over || active.id === over.id) return;
 
-    const [activeEmpIdx, activeTaskId] = String(active.id).replace("draggable-", "").split("-");
-    const [overEmpIdx, destDayIdxStr] = String(over.id).replace("droppable-", "").split("-");
+    const [activeEmpIdx, activeTaskId] = String(active.id)
+      .replace("draggable-", "")
+      .split("-");
+    const [overEmpIdx, destDayIdxStr] = String(over.id)
+      .replace("droppable-", "")
+      .split("-");
 
     const srcEmpIdx = parseInt(activeEmpIdx, 10);
     const destEmpIdx = parseInt(overEmpIdx, 10);

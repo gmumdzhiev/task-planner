@@ -7,7 +7,7 @@ export interface Task {
   nonpbreak: string;
   cost: string;
   day: string;
-  type: "task" | "break";
+  type: "task" | "leave";
   competences: string;
   attributes: string;
   notCounted: boolean;

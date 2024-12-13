@@ -103,7 +103,7 @@ export const DraggableTask = ({
         onContextMenu={handleContextMenu}
         onClick={(event) => event.stopPropagation()}
         className={`relative z-10 flex flex-col items-start w-full p-2 rounded-md shadow ${
-          task.type === "break"
+          task.type === "leave"
             ? "bg-yellow-100 text-yellow-600"
             : "bg-lime-200 text-green-600"
         }`}
