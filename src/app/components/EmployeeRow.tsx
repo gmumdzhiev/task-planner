@@ -1,5 +1,4 @@
 "use client";
-
 import React, { useState, useEffect } from "react";
 import { Employee, Task } from "../types/schedule";
 import { useDraggable, useDroppable } from "@dnd-kit/core";
@@ -11,15 +10,18 @@ import {
   faMoneyBill,
   faCopy,
   faTrashAlt,
-  faBars,
+  faPencil,
 } from "@fortawesome/free-solid-svg-icons";
 
 interface EmployeeRowProps {
   employee: Employee;
   employeeIndex: number;
   week: string[];
-  openTaskId: string | null;
-  onContextMenuOpen: (taskId: string) => void;
+  onOpenModal: (
+    task: Task | null,
+    employee: Employee | null,
+    day: string | null
+  ) => void;
 }
 
 interface DraggableTaskProps {
@@ -27,15 +29,25 @@ interface DraggableTaskProps {
   employeeIndex: number;
   openTaskId: string | null;
   onContextMenuOpen: (taskId: string) => void;
+  onOpenModal: (
+    task: Task | null,
+    employee: Employee | null,
+    day: string | null
+  ) => void;
 }
 
 export const EmployeeRow = ({
   employee,
   employeeIndex,
   week,
-  openTaskId,
-  onContextMenuOpen,
+  onOpenModal,
 }: EmployeeRowProps) => {
+  const [openTaskId, setOpenTaskId] = useState<string | null>(null);
+
+  const handleContextMenuOpen = (taskId: string) => {
+    setOpenTaskId(taskId);
+  };
+
   return (
     <div className="grid grid-cols-8 border-b last:border-b-0 border-gray-200">
       <div className="flex flex-col items-start justify-center p-4 bg-gray-100">
@@ -51,7 +63,10 @@ export const EmployeeRow = ({
           dayIndex={dayIndex}
           tasks={employee.tasks.filter((task) => task.day === day)}
           openTaskId={openTaskId}
-          onContextMenuOpen={onContextMenuOpen}
+          onContextMenuOpen={handleContextMenuOpen}
+          onOpenModal={onOpenModal}
+          employee={employee}
+          day={day}
         />
       ))}
     </div>
@@ -63,6 +78,7 @@ const DraggableTask = ({
   employeeIndex,
   openTaskId,
   onContextMenuOpen,
+  onOpenModal,
 }: DraggableTaskProps) => {
   const { attributes, listeners, setNodeRef, transform } = useDraggable({
     id: `${employeeIndex}-${task.id}`,
@@ -102,9 +118,9 @@ const DraggableTask = ({
       color: "base",
     },
     {
-      label: "Create a contract",
-      action: () => console.log("Contract created"),
-      icon: faBars,
+      label: "Edit",
+      action: () => onOpenModal(task, null, null),
+      icon: faPencil,
       color: "base",
     },
     {
@@ -123,6 +139,7 @@ const DraggableTask = ({
         {...listeners}
         style={style}
         onContextMenu={handleContextMenu}
+        onClick={(event) => event.stopPropagation()}
         className={`flex flex-col items-start w-full p-2 rounded-md shadow ${
           task.type === "break"
             ? "bg-yellow-100 text-yellow-600"
@@ -130,7 +147,7 @@ const DraggableTask = ({
         }`}
       >
         <span className="py-1 text-base font-semibold text-gray-700">
-          {task.time}
+          {task.startTime}-{task.endTime}
         </span>
         <div className="py-1 flex items-center gap-2">
           <div className="flex items-center gap-1">
@@ -139,7 +156,7 @@ const DraggableTask = ({
               className="text-gray-500 icon-size"
             />
             <span className="text-gray-500 text-xs font-medium">
-              {task.hours}
+              {task.totalHours}
             </span>
           </div>
           <div className="flex items-center gap-1">
@@ -182,19 +199,43 @@ const DroppableArea = ({
   tasks,
   openTaskId,
   onContextMenuOpen,
+  onOpenModal,
+  employee,
+  day,
 }: {
   employeeIndex: number;
   dayIndex: number;
   tasks: Task[];
   openTaskId: string | null;
   onContextMenuOpen: (taskId: string) => void;
+  onOpenModal: (
+    task: Task | null,
+    employee: Employee | null,
+    day: string | null
+  ) => void;
+  employee: Employee;
+  day: string;
 }) => {
   const { setNodeRef } = useDroppable({
     id: `${employeeIndex}-${dayIndex}`,
   });
 
+  const handleOpenModal = (event: React.MouseEvent) => {
+    event.stopPropagation();
+    onOpenModal(null, employee, day);
+  };
+
   return (
-    <div ref={setNodeRef} className="p-2 border border-gray-200">
+    <div
+      ref={setNodeRef}
+      className="p-2 border border-gray-200 relative group hover:bg-gray-100"
+      onClick={handleOpenModal}
+    >
+      {tasks.length === 0 && (
+        <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100">
+          <button className="text-gray-500 text-2xl">+</button>
+        </div>
+      )}
       {tasks.map((task) => (
         <DraggableTask
           key={task.id}
@@ -202,35 +243,7 @@ const DroppableArea = ({
           employeeIndex={employeeIndex}
           openTaskId={openTaskId}
           onContextMenuOpen={onContextMenuOpen}
-        />
-      ))}
-    </div>
-  );
-};
-
-export const ScheduleGrid = ({
-  employees,
-  week,
-}: {
-  employees: Employee[];
-  week: string[];
-}) => {
-  const [openTaskId, setOpenTaskId] = useState<string | null>(null);
-
-  const handleContextMenuOpen = (taskId: string) => {
-    setOpenTaskId(taskId);
-  };
-
-  return (
-    <div>
-      {employees.map((employee, employeeIndex) => (
-        <EmployeeRow
-          key={employee.id}
-          employee={employee}
-          employeeIndex={employeeIndex}
-          week={week}
-          openTaskId={openTaskId}
-          onContextMenuOpen={handleContextMenuOpen}
+          onOpenModal={onOpenModal}
         />
       ))}
     </div>

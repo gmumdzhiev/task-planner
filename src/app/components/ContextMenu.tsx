@@ -17,11 +17,7 @@ type ContextMenuProps = {
   onClose: () => void;
 };
 
-export const ContextMenu = ({
-  options,
-  position,
-  onClose,
-}: ContextMenuProps) => {
+export const ContextMenu = ({ options, onClose }: ContextMenuProps) => {
   useEffect(() => {
     const handleOutsideClick = (event: MouseEvent) => {
       if (
@@ -37,17 +33,10 @@ export const ContextMenu = ({
     };
   }, [onClose]);
 
-  const viewportWidth = window.innerWidth;
-  const menuWidth = 150;
-  const adjustedX =
-    position.x + menuWidth > viewportWidth
-      ? position.x - menuWidth
-      : position.x;
-
   return (
     <div
       className="absolute bg-white shadow-lg border border-gray-200 rounded-md z-50 overflow-hidden context-menu"
-      style={{ top: `${position.y}px`, left: `${adjustedX}px` }}
+      style={{ top: `65px`, left: `45px` }}
     >
       {options.map((option, index) => (
         <button

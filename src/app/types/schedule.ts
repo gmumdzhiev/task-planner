@@ -1,12 +1,16 @@
 export interface Task {
   id: string;
-  time: string;
   label: string;
-  hours: string;
+  startTime: string;
+  endTime: string;
+  totalHours: string;
   break: string;
   cost: string;
   day: string;
   type: "task" | "break";
+  competences: string;
+  attributes: string;
+  notCounted: boolean;
 }
 
 export interface Employee {

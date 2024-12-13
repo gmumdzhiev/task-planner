@@ -4,10 +4,15 @@ import React, { useState } from "react";
 import { DndContext, DragEndEvent } from "@dnd-kit/core";
 import { ScheduleGrid } from "./components/ScheduleGrid";
 import { scheduleData } from "./data/schedule";
-import { ScheduleData } from "./types/schedule";
+import { ScheduleData, Employee, Task } from "./types/schedule";
+import { Modal } from "./components/Modal";
 
 const SchedulePage = () => {
   const [data, setData] = useState<ScheduleData>(scheduleData);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalTask, setModalTask] = useState<Task | null>(null);
+  const [modalEmployee, setModalEmployee] = useState<Employee | null>(null);
+  const [modalDay, setModalDay] = useState<string | null>(null);
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
@@ -50,12 +55,36 @@ const SchedulePage = () => {
     });
   };
 
+  const handleOpenModal = (
+    task: Task | null,
+    employee: Employee | null,
+    day: string | null
+  ) => {
+    setModalTask(task);
+    setModalEmployee(employee);
+    setModalDay(day);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+
   return (
     <main className="p-8 bg-gray-100">
       <h1 className="text-2xl font-bold mb-4 text-gray-600">Schedule</h1>
       <DndContext onDragEnd={handleDragEnd}>
-        <ScheduleGrid data={data} />
+        <ScheduleGrid data={data} onOpenModal={handleOpenModal} />
       </DndContext>
+      {isModalOpen && (
+        <Modal
+          task={modalTask}
+          employee={modalEmployee}
+          day={modalDay}
+          onClose={handleCloseModal}
+          employees={data.employees}
+        />
+      )}
     </main>
   );
 };
