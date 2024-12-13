@@ -19,12 +19,8 @@ const SchedulePage = () => {
 
     if (!over || active.id === over.id) return;
 
-    const [activeEmpIdx, activeTaskId] = String(active.id)
-      .replace("draggable-", "")
-      .split("-");
-    const [overEmpIdx, destDayIdxStr] = String(over.id)
-      .replace("droppable-", "")
-      .split("-");
+    const [activeEmpIdx, activeTaskId] = String(active.id).replace("draggable-", "").split("-");
+    const [overEmpIdx, destDayIdxStr] = String(over.id).replace("droppable-", "").split("-");
 
     const srcEmpIdx = parseInt(activeEmpIdx, 10);
     const destEmpIdx = parseInt(overEmpIdx, 10);

@@ -1,5 +1,3 @@
-"use client";
-
 import React, { useState, useEffect } from "react";
 import { Employee, Task } from "../types/schedule";
 
@@ -10,37 +8,94 @@ interface ShiftModalProps {
   onClose: () => void;
   employees: Employee[];
 }
-
 export const Modal = ({
   task,
   employee,
+  day,
   onClose,
   employees,
 }: ShiftModalProps) => {
-  const [shiftType, setShiftType] = useState(task ? task.type : "shift");
+  const [shiftType, setShiftType] = useState<"task" | "break">(
+    task ? task.type : "task"
+  );
   const [selectedEmployee, setSelectedEmployee] = useState<Employee | null>(
     employee
   );
-  const [label, setLabel] = useState(task ? task.label : "");
+  const [label, setLabel] = useState(task ? task.label : "Cashier");
   const [competences, setCompetences] = useState(task ? task.competences : "");
   const [attributes, setAttributes] = useState(task ? task.attributes : "");
   const [fromHour, setFromHour] = useState(task ? task.startTime : "08:00");
   const [toHour, setToHour] = useState(task ? task.endTime : "17:00");
-  const [breakTime, setBreakTime] = useState(task ? task.break : "00:30");
+  const [breakTime, setBreakTime] = useState(task ? task.nonpbreak : "00:30");
   const [notCounted, setNotCounted] = useState(task ? task.notCounted : false);
+
+  const hourlyRates: Record<string, number> = {
+    Opening: 10.4,
+    Closing: 13.08,
+    Cashier: 13.2,
+    Stock: 12.0,
+    Truck: 13.07,
+  };
 
   useEffect(() => {
     setSelectedEmployee(employee);
   }, [employee]);
 
-  const handleSubmit = () => {
-    console.log("submit");
+  const calculateTotalHours = (
+    start: string,
+    end: string,
+    breakTime: string
+  ): string => {
+    const [startHour, startMinute] = start.split(":").map(Number);
+    const [endHour, endMinute] = end.split(":").map(Number);
+    const [breakHour, breakMinute] = breakTime.split(":").map(Number);
+    const startDate = new Date();
+    startDate.setHours(startHour, startMinute);
+    const endDate = new Date();
+    endDate.setHours(endHour, endMinute);
+    const breakDuration = breakHour * 60 + breakMinute;
+    const diffMinutes =
+      (endDate.getTime() - startDate.getTime()) / (1000 * 60) - breakDuration;
+    const hours = Math.floor(diffMinutes / 60);
+    const minutes = Math.floor(diffMinutes % 60);
+    return `${hours}h${minutes > 0 ? minutes + "m" : ""}`;
+  };
+  const calculateCost = (totalHours: string, hourlyRate: number): string => {
+    const [hours, minutes] = totalHours.split(/[hm]/).map(Number);
+    const totalMinutes = hours * 60 + (minutes || 0);
+    const totalHoursDecimal = totalMinutes / 60;
+    const cost = Math.round(totalHoursDecimal * hourlyRate);
+    return cost.toString();
   };
 
+  const handleSubmit = () => {
+    if (selectedEmployee && day) {
+      const totalHours = calculateTotalHours(fromHour, toHour, breakTime);
+      const hourlyRate = hourlyRates[label];
+      const cost = calculateCost(totalHours, hourlyRate);
+      const newTask: Task = {
+        id: new Date().getTime().toString(),
+        startTime: fromHour,
+        endTime: toHour,
+        label: label,
+        totalHours: totalHours,
+        nonpbreak: breakTime,
+        cost: cost,
+        day: day,
+        type: shiftType,
+        competences: competences,
+        attributes: attributes,
+        notCounted: notCounted,
+      };
+      selectedEmployee.tasks.push(newTask);
+      onClose();
+    } else {
+      alert("Please select an employee and fill in all required fields.");
+    }
+  };
   const handleModalClick = (event: React.MouseEvent) => {
     event.stopPropagation();
   };
-
   return (
     <div
       style={{ zIndex: 11 }}
@@ -61,11 +116,11 @@ export const Modal = ({
           <label className="block text-gray-700">Type*</label>
           <select
             value={shiftType}
-            onChange={(e) => setShiftType(e.target.value)}
+            onChange={(e) => setShiftType(e.target.value as "task" | "break")}
             className="w-full p-2 border rounded"
           >
-            <option value="shift">Shift</option>
-            <option value="absence">Absence</option>
+            <option value="task">Task</option>
+            <option value="break">Break</option>
           </select>
         </div>
         <div className="mb-4">
@@ -100,12 +155,17 @@ export const Modal = ({
         </div>
         <div className="mb-4">
           <label className="block text-gray-700">Label*</label>
-          <input
-            type="text"
+          <select
             value={label}
             onChange={(e) => setLabel(e.target.value)}
             className="w-full p-2 border rounded"
-          />
+          >
+            <option value="Opening">Opening</option>
+            <option value="Closing">Closing</option>
+            <option value="Cashier">Cashier</option>
+            <option value="Stock">Stock</option>
+            <option value="Truck">Truck</option>
+          </select>
         </div>
         <div className="mb-4">
           <label className="block text-gray-700">Competences</label>
@@ -180,7 +240,7 @@ export const Modal = ({
             className="bg-green-500 text-white px-4 py-2 rounded"
             onClick={handleSubmit}
           >
-            {selectedEmployee?.tasks ? "Edit Shift" : "Create Shift"}
+            {task ? "Edit Shift" : "Create Shift"}
           </button>
         </div>
       </div>

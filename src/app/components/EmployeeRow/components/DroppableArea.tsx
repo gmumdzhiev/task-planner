@@ -1,8 +1,7 @@
 import React from "react";
 import { useDroppable } from "@dnd-kit/core";
-
+import { DraggableTask } from "../components/DraggableTask";
 import { Task, Employee } from "../../../types/schedule";
-import { DraggableTask } from "./DraggableTask";
 
 interface DroppableAreaProps {
   employeeIndex: number;

@@ -4,7 +4,7 @@ export interface Task {
   startTime: string;
   endTime: string;
   totalHours: string;
-  break: string;
+  nonpbreak: string;
   cost: string;
   day: string;
   type: "task" | "break";

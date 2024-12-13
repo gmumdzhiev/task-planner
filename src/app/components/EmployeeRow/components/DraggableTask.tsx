@@ -24,6 +24,14 @@ interface DraggableTaskProps {
   ) => void;
 }
 
+const labelColorMap: { [key: string]: string } = {
+  Opening: "bg-orange-600",
+  Closing: "bg-rose-600",
+  Cashier: "bg-lime-600",
+  Stock: "bg-violet-900",
+  Truck: "bg-blue-700",
+};
+
 export const DraggableTask = ({
   task,
   employeeIndex,
@@ -83,6 +91,8 @@ export const DraggableTask = ({
     },
   ];
 
+  const labelColorClass = labelColorMap[task.label] || "bg-lime-600";
+
   return (
     <>
       <div
@@ -117,7 +127,7 @@ export const DraggableTask = ({
               className="text-gray-500 icon-size"
             />
             <span className="text-gray-500 text-xs font-medium">
-              {task.break}
+              {task.nonpbreak}
             </span>
           </div>
           <div className="flex items-center gap-1">
@@ -130,7 +140,9 @@ export const DraggableTask = ({
             </span>
           </div>
         </div>
-        <span className="py-1 w-full text-xs font-semibold rounded-md shadow bg-lime-600 text-gray-700 px-2">
+        <span
+          className={`py-1 w-full text-xs font-semibold rounded-md shadow ${labelColorClass} text-gray-100 px-2`}
+        >
           {task.label}
         </span>
       </div>
