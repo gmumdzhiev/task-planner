@@ -28,11 +28,17 @@ export const Modal = ({
   const [toHour, setToHour] = useState(task ? task.endTime : "17:00");
   const [breakTime, setBreakTime] = useState(task ? task.break : "00:30");
   const [notCounted, setNotCounted] = useState(task ? task.notCounted : false);
+
   useEffect(() => {
     setSelectedEmployee(employee);
   }, [employee]);
+
   const handleSubmit = () => {
     console.log("submit");
+  };
+
+  const handleModalClick = (event: React.MouseEvent) => {
+    event.stopPropagation();
   };
 
   return (
@@ -41,7 +47,10 @@ export const Modal = ({
       className="fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-end"
       onClick={onClose}
     >
-      <div className="bg-white w-1/3 h-full p-4 shadow-lg">
+      <div
+        className="z-12 bg-white w-1/3 h-full p-4 shadow-lg"
+        onClick={handleModalClick}
+      >
         <button className="text-gray-500 hover:text-gray-700" onClick={onClose}>
           Cancel
         </button>

@@ -14,8 +14,6 @@ const SchedulePage = () => {
   const [modalEmployee, setModalEmployee] = useState<Employee | null>(null);
   const [modalDay, setModalDay] = useState<string | null>(null);
 
-  console.log(data);
-
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
 
