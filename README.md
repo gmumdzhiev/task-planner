@@ -1,5 +1,5 @@
 # Task Planner 🗓️
-![Screen](./src/app/assets/screen.jpg)
+![Screen](./public/assets/screen.jpg)
 
 Welcome to **Task Planner**, your go-to app for managing tasks efficiently and effectively. Built with **Next.js**, **Tailwind CSS**, and **TypeScript**, Task Planner offers a modern and responsive interface for all your scheduling needs.
 
