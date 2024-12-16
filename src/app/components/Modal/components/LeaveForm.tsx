@@ -14,7 +14,26 @@ const hourlyRates: Record<string, number> = {
   Recuperation: 13.0,
 };
 
+const calculateTotalHours = (start: string, end: string): string => {
+  const [startHour, startMinute] = start.split(":").map(Number);
+  const [endHour, endMinute] = end.split(":").map(Number);
+
+  const startDate = new Date();
+  startDate.setHours(startHour, startMinute);
+
+  const endDate = new Date();
+  endDate.setHours(endHour, endMinute);
+
+  const diffMinutes = (endDate.getTime() - startDate.getTime()) / (1000 * 60);
+
+  const hours = Math.floor(diffMinutes / 60);
+  const minutes = Math.floor(diffMinutes % 60);
+
+  return `${hours}h${minutes > 0 ? minutes + "m" : ""}`;
+};
+
 export const LeaveForm = ({
+  task,
   employee,
   day,
   onClose,
@@ -26,18 +45,19 @@ export const LeaveForm = ({
   const [leaveType, setLeaveType] = useState<"Holiday" | "Recuperation">(
     "Holiday"
   );
-  const [hours, setHours] = useState("08:00");
   const [wholeDay, setWholeDay] = useState(false);
+  const [fromHour, setFromHour] = useState(task ? task.startTime : "08:00");
+  const [toHour, setToHour] = useState(task ? task.endTime : "17:00");
 
   useEffect(() => {
     setSelectedEmployee(employee);
   }, [employee]);
 
-  const calculateCost = (hours: string, hourlyRate: number): string => {
+  const calculateCost = (totalHours: string, hourlyRate: number): string => {
     if (wholeDay) {
       return "190";
     }
-    const [hoursPart, minutesPart] = hours.split(":").map(Number);
+    const [hoursPart, minutesPart] = totalHours.split(/[hm]/).map(Number);
     const totalMinutes = hoursPart * 60 + (minutesPart || 0);
     const totalHoursDecimal = totalMinutes / 60;
     const cost = Math.round(totalHoursDecimal * hourlyRate);
@@ -46,14 +66,15 @@ export const LeaveForm = ({
 
   const handleSubmit = () => {
     if (selectedEmployee && day) {
+      const totalHours = calculateTotalHours(fromHour, toHour);
       const hourlyRate = hourlyRates[leaveType];
-      const cost = calculateCost(hours, hourlyRate);
+      const cost = calculateCost(totalHours, hourlyRate);
       const newTask: Task = {
         id: new Date().getTime().toString(),
-        startTime: "00:00",
-        endTime: "23:59",
+        startTime: fromHour,
+        endTime: toHour,
         label: leaveType,
-        totalHours: wholeDay ? "24h" : hours,
+        totalHours: totalHours,
         nonpbreak: "00:00",
         cost: cost,
         day: day,
@@ -107,13 +128,26 @@ export const LeaveForm = ({
       </div>
       <div className="mb-4">
         <label className="block text-gray-700">Hours*</label>
-        <input
-          type="time"
-          value={hours}
-          onChange={(e) => setHours(e.target.value)}
-          className="w-full p-2 border rounded"
-          disabled={wholeDay}
-        />
+        <div className="mb-4 flex justify-between">
+          <div className="w-1/2 pr-2">
+            <label className="block text-gray-700">From*</label>
+            <input
+              type="time"
+              value={fromHour}
+              onChange={(e) => setFromHour(e.target.value)}
+              className="w-full p-2 border rounded"
+            />
+          </div>
+          <div className="w-1/2 pl-2">
+            <label className="block text-gray-700">To*</label>
+            <input
+              type="time"
+              value={toHour}
+              onChange={(e) => setToHour(e.target.value)}
+              className="w-full p-2 border rounded"
+            />
+          </div>
+        </div>
       </div>
       <div className="mb-4">
         <label className="inline-flex items-center">
@@ -123,7 +157,7 @@ export const LeaveForm = ({
             onChange={(e) => setWholeDay(e.target.checked)}
             className="form-checkbox"
           />
-          <span className="ml-2 text-gray-700">Whole day (€190)</span>
+          <span className="ml-2 text-gray-700">Whole day</span>
         </label>
       </div>
       <div className="flex justify-end gap-2">
