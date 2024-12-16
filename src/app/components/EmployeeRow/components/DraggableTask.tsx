@@ -13,18 +13,31 @@ import { Task, Employee } from "../../../types/schedule";
 
 interface DraggableTaskProps {
   task: Task;
+  employee: Employee;
+  day: string | null;
   employeeIndex: number;
   openTaskId: string | null;
   onContextMenuOpen: (taskId: string) => void;
   onOpenModal: (
     task: Task | null,
     employee: Employee | null,
-    day: string | null
+    day: string | null,
+    formType: "shift" | "leave" | "edit"
   ) => void;
 }
 
+const labelColorMap: { [key: string]: string } = {
+  Opening: "bg-orange-600",
+  Closing: "bg-rose-600",
+  Cashier: "bg-lime-600",
+  Stock: "bg-violet-900",
+  Truck: "bg-blue-700",
+};
+
 export const DraggableTask = ({
   task,
+  employee,
+  day,
   employeeIndex,
   openTaskId,
   onContextMenuOpen,
@@ -72,7 +85,10 @@ export const DraggableTask = ({
     },
     {
       label: "Edit",
-      action: () => onOpenModal(task, null, null),
+      action: (event: React.MouseEvent) => {
+        event.stopPropagation();
+        onOpenModal(task, employee, day, "edit");
+      },
       icon: faPencil,
       color: "base",
     },
@@ -92,6 +108,8 @@ export const DraggableTask = ({
 
   const labelDisplay = getLabelDisplay();
 
+  const labelColorClass = labelColorMap[task.label] || "bg-lime-600";
+
   return (
     <>
       <div
@@ -101,7 +119,7 @@ export const DraggableTask = ({
         style={style}
         onContextMenu={handleContextMenu}
         onClick={(event) => event.stopPropagation()}
-        className={`relative z-10 flex flex-col items-start w-full p-2 rounded-md shadow 
+        className={`my-2 relative z-10 flex flex-col items-start w-full p-2 rounded-md shadow 
           ${
             labelDisplay
               ? "bg-gray-100 text-gray-700 bg-[repeating-linear-gradient(-45deg,_#f7fafc,_#f7fafc_10px,_#e2e8f0_10px,_#e2e8f0_20px)]"
@@ -151,7 +169,9 @@ export const DraggableTask = ({
           </span>
         )}
         {!labelDisplay && (
-          <span className="py-1 w-full text-xs font-semibold rounded-md shadow bg-lime-600 text-gray-100 px-2 my-1">
+          <span
+            className={`py-1 w-full text-xs font-semibold rounded-md shadow ${labelColorClass} text-gray-100 px-2 my-1`}
+          >
             {task.label}
           </span>
         )}

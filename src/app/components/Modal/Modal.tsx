@@ -1,9 +1,10 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import { Employee, Task } from "../../types/schedule";
 import { ShiftForm } from "./components/ShiftForm";
 import { LeaveForm } from "./components/LeaveForm";
+import EditForm from "./components/EditForm";
 
 interface ShiftModalProps {
   task: Task | null;
@@ -11,6 +12,8 @@ interface ShiftModalProps {
   day: string | null;
   onClose: () => void;
   employees: Employee[];
+  formType: string;
+  setFormType: (formType: "shift" | "leave" | "edit") => void;
 }
 
 export const Modal = ({
@@ -19,12 +22,14 @@ export const Modal = ({
   day,
   onClose,
   employees,
+  formType,
+  setFormType,
 }: ShiftModalProps) => {
-  const [formType, setFormType] = useState<"shift" | "leave">("shift");
-
   const handleFormTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setFormType(e.target.value as "shift" | "leave");
   };
+
+  console.log("Employee from modal", employee);
 
   const handleModalClick = (event: React.MouseEvent) => {
     event.stopPropagation();
@@ -65,8 +70,16 @@ export const Modal = ({
             onClose={onClose}
             employees={employees}
           />
-        ) : (
+        ) : formType === "leave" ? (
           <LeaveForm
+            task={task}
+            employee={employee}
+            day={day}
+            onClose={onClose}
+            employees={employees}
+          />
+        ) : (
+          <EditForm
             task={task}
             employee={employee}
             day={day}

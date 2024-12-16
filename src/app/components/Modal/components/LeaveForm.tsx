@@ -127,7 +127,6 @@ export const LeaveForm = ({
         </select>
       </div>
       <div className="mb-4">
-        <label className="block text-gray-700">Hours*</label>
         <div className="mb-4 flex justify-between">
           <div className="w-1/2 pr-2">
             <label className="block text-gray-700">From*</label>

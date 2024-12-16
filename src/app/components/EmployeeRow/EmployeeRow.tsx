@@ -9,7 +9,8 @@ interface EmployeeRowProps {
   onOpenModal: (
     task: Task | null,
     employee: Employee | null,
-    day: string | null
+    day: string | null,
+    formType: "shift" | "leave" | "edit"
   ) => void;
   openTaskId: string | null;
   onContextMenuOpen: (taskId: string) => void;

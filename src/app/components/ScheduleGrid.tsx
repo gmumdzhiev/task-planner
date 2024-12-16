@@ -8,7 +8,8 @@ interface ScheduleGridProps {
   onOpenModal: (
     task: Task | null,
     employee: Employee | null,
-    day: string | null
+    day: string | null,
+    formType: "shift" | "leave" | "edit"
   ) => void;
 }
 

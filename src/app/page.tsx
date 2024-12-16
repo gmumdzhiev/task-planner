@@ -13,6 +13,7 @@ const SchedulePage = () => {
   const [modalTask, setModalTask] = useState<Task | null>(null);
   const [modalEmployee, setModalEmployee] = useState<Employee | null>(null);
   const [modalDay, setModalDay] = useState<string | null>(null);
+  const [form, setForm] = useState<"shift" | "leave" | "edit">("shift");
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
@@ -62,12 +63,15 @@ const SchedulePage = () => {
   const handleOpenModal = (
     task: Task | null,
     employee: Employee | null,
-    day: string | null
+    day: string | null,
+    formType: "shift" | "leave" | "edit"
   ) => {
     setModalTask(task);
     setModalEmployee(employee);
     setModalDay(day);
     setIsModalOpen(true);
+    setForm(formType);
+    console.log("incoming formType", formType);
   };
 
   const handleCloseModal = () => {
@@ -87,6 +91,8 @@ const SchedulePage = () => {
           day={modalDay}
           onClose={handleCloseModal}
           employees={data.employees}
+          formType={form}
+          setFormType={setForm}
         />
       )}
     </main>

@@ -12,7 +12,8 @@ interface DroppableAreaProps {
   onOpenModal: (
     task: Task | null,
     employee: Employee | null,
-    day: string | null
+    day: string | null,
+    formType: "shift" | "leave" | "edit"
   ) => void;
   employee: Employee;
   day: string;
@@ -28,18 +29,23 @@ export const DroppableArea = ({
   employee,
   day,
 }: DroppableAreaProps) => {
-  const { setNodeRef } = useDroppable({ id: `droppable-${employeeIndex}-${dayIndex}` });
+  const { setNodeRef } = useDroppable({
+    id: `droppable-${employeeIndex}-${dayIndex}`,
+  });
 
-  const handleOpenModal = (event: React.MouseEvent) => {
+  const handleOpenModal = (
+    event: React.MouseEvent,
+    formType: "shift" | "leave" | "edit"
+  ) => {
     event.stopPropagation();
-    onOpenModal(null, employee, day);
+    onOpenModal(null, employee, day, formType);
   };
 
   return (
     <div
       ref={setNodeRef}
       className="relative p-2 border border-gray-200 group hover:bg-gray-100"
-      onClick={handleOpenModal}
+      onClick={(event) => handleOpenModal(event, "shift")}
     >
       {tasks.length === 0 && (
         <div className="absolute inset-0 z-0 flex items-center justify-center opacity-0 group-hover:opacity-100">
@@ -50,6 +56,8 @@ export const DroppableArea = ({
         <DraggableTask
           key={task.id}
           task={task}
+          employee={employee}
+          day={day}
           employeeIndex={employeeIndex}
           openTaskId={openTaskId}
           onContextMenuOpen={onContextMenuOpen}

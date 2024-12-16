@@ -8,7 +8,7 @@ type MenuOption = {
   label: string;
   icon: IconProp;
   color: string;
-  action: () => void;
+  action: (event: React.MouseEvent) => void;
 };
 
 type ContextMenuProps = {
@@ -41,8 +41,8 @@ export const ContextMenu = ({ options, onClose }: ContextMenuProps) => {
       {options.map((option, index) => (
         <button
           key={index}
-          onClick={() => {
-            option.action();
+          onClick={(event) => {
+            option.action(event);
             onClose();
           }}
           className="block w-full px-4 py-2 text-sm text-left text-gray-700 hover:bg-gray-100 transition-colors"

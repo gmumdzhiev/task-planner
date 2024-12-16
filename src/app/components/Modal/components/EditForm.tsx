@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { Employee, Task } from "../../../types/schedule";
+import { Employee, Task } from "@/app/types/schedule";
 
-interface ShiftFormProps {
+interface EditFormProps {
   task: Task | null;
   employee: Employee | null;
   day: string | null;
@@ -45,16 +45,12 @@ const calculateCost = (totalHours: string, hourlyRate: number): string => {
   return cost.toString();
 };
 
-export const ShiftForm = ({
-  task,
-  employee,
-  day,
-  onClose,
-  employees,
-}: ShiftFormProps) => {
+const EditForm = ({ task, employee, day, onClose }: EditFormProps) => {
   const [selectedEmployee, setSelectedEmployee] = useState<Employee | null>(
     employee
   );
+
+
   const [label, setLabel] = useState(task ? task.label : "Cashier");
   const [competences, setCompetences] = useState(task ? task.competences : "");
   const [attributes, setAttributes] = useState(task ? task.attributes : "");
@@ -68,12 +64,13 @@ export const ShiftForm = ({
   }, [employee]);
 
   const handleSubmit = () => {
-    if (selectedEmployee && day) {
+    if (selectedEmployee && day && task) {
       const totalHours = calculateTotalHours(fromHour, toHour, breakTime);
       const hourlyRate = hourlyRates[label];
       const cost = calculateCost(totalHours, hourlyRate);
-      const newTask: Task = {
-        id: new Date().getTime().toString(),
+      const updatedTask: Task = {
+        ...task,
+        id: task.id,
         startTime: fromHour,
         endTime: toHour,
         label: label,
@@ -81,12 +78,18 @@ export const ShiftForm = ({
         nonpbreak: breakTime,
         cost: cost,
         day: day,
-        type: "task",
         competences: competences,
         attributes: attributes,
         notCounted: notCounted,
       };
-      selectedEmployee.tasks.push(newTask);
+
+      const taskIndex = selectedEmployee.tasks.findIndex(
+        (t) => t.id === task.id
+      );
+      if (taskIndex !== -1) {
+        selectedEmployee.tasks[taskIndex] = updatedTask;
+      }
+
       onClose();
     } else {
       alert("Please select an employee and fill in all required fields.");
@@ -95,36 +98,14 @@ export const ShiftForm = ({
 
   return (
     <div>
-      <div className="mb-4"></div>
       <div className="mb-4">
         <label className="block text-gray-700">Employee*</label>
-        {task ? (
-          <input
-            type="text"
-            value={selectedEmployee?.name || ""}
-            disabled
-            className="w-full p-2 border rounded"
-          />
-        ) : (
-          <select
-            value={selectedEmployee?.id || ""}
-            onChange={(e) =>
-              setSelectedEmployee(
-                employees.find((emp) => emp.id === e.target.value) || null
-              )
-            }
-            className="w-full p-2 border rounded"
-          >
-            <option value="" disabled>
-              Select an employee
-            </option>
-            {employees.map((emp) => (
-              <option key={emp.id} value={emp.id}>
-                {emp.name}
-              </option>
-            ))}
-          </select>
-        )}
+        <input
+          type="text"
+          value={selectedEmployee?.name || ""}
+          disabled
+          className="w-full p-2 border rounded"
+        />
       </div>
       <div className="mb-4">
         <label className="block text-gray-700">Label*</label>
@@ -211,9 +192,11 @@ export const ShiftForm = ({
           className="bg-green-500 text-white px-4 py-2 rounded"
           onClick={handleSubmit}
         >
-          {task ? "Edit Shift" : "Create Shift"}
+          Save Changes
         </button>
       </div>
     </div>
   );
 };
+
+export default EditForm;
