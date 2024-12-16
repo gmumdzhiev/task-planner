@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import Image from "next/image";
 import { DndContext, DragEndEvent } from "@dnd-kit/core";
 import { ScheduleGrid } from "./components/ScheduleGrid/ScheduleGrid";
 import { scheduleData as initialScheduleData } from "./data/schedule";
@@ -134,7 +135,18 @@ const SchedulePage = () => {
 
   return (
     <main className="p-8 bg-gray-100">
-      <h1 className="text-xl md:text-2xl lg:text-3xl font-bold mb-4 text-gray-600">Schedule</h1>
+      <div className="flex py-4 items-center">
+        <Image
+          src="/assets/logo.png"
+          alt="Task Planner Logo"
+          width={64}
+          height={64}
+          style={{ objectFit: "cover" }}
+        />
+        <h1 className="text-xl md:text-2xl lg:text-3xl font-bold  text-gray-600 px-2 ">
+          Schedule
+        </h1>
+      </div>
       <DndContext onDragEnd={handleDragEnd}>
         <ScheduleGrid
           data={data}

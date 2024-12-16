@@ -1,3 +1,4 @@
+![banner](./public/assets/banner.jpg)
 # Task Planner 🗓️
 ![Screen](./public/assets/screen.jpg)
 
