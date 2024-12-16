@@ -1,28 +1,9 @@
 import React, { useState } from "react";
 import { useDroppable } from "@dnd-kit/core";
-import { DraggableTask } from "../components/DraggableTask";
-import { Task, Employee } from "../../../types/schedule";
-import { PasteContextMenu } from "../../PasteContextMenu";
-
-interface DroppableAreaProps {
-  employeeIndex: number;
-  dayIndex: number;
-  tasks: Task[];
-  openTaskId: string | null;
-  onContextMenuOpen: (taskId: string) => void;
-  onOpenModal: (
-    task: Task | null,
-    employee: Employee | null,
-    day: string | null,
-    formType: "shift" | "leave" | "edit"
-  ) => void;
-  employee: Employee;
-  day: string;
-  onCopyTask: (task: Task) => void;
-  onPasteTask: (task: Task, day: string, employeeIndex: number) => void;
-  copiedTask: Task | null;
-  onDeleteTask: (employeeIndex: number, taskId: string) => void;
-}
+import { DraggableTask } from "../DraggableTask/DraggableTask";
+import { Task } from "../../../../types/schedule";
+import { PasteContextMenu } from "../../../PasteContextMenu/PasteContextMenu";
+import { IProps } from "./IProps";
 
 export const DroppableArea = ({
   employeeIndex,
@@ -37,7 +18,7 @@ export const DroppableArea = ({
   onCopyTask,
   onPasteTask,
   copiedTask,
-}: DroppableAreaProps) => {
+}: IProps) => {
   const { setNodeRef } = useDroppable({
     id: `droppable-${employeeIndex}-${dayIndex}`,
   });

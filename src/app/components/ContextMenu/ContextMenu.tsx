@@ -2,22 +2,9 @@
 
 import { useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { IconProp } from "@fortawesome/fontawesome-svg-core";
+import { IProps } from "./IProps";
 
-type MenuOption = {
-  label: string;
-  icon: IconProp;
-  color: string;
-  action: (event: React.MouseEvent) => void;
-};
-
-type ContextMenuProps = {
-  options: MenuOption[];
-  position: { x: number; y: number };
-  onClose: () => void;
-};
-
-export const ContextMenu = ({ options, onClose }: ContextMenuProps) => {
+export const ContextMenu = ({ options, onClose }: IProps) => {
   useEffect(() => {
     const handleOutsideClick = (event: MouseEvent) => {
       if (

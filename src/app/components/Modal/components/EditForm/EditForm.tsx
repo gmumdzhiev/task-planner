@@ -1,51 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Employee, Task } from "@/app/types/schedule";
+import { calculateCost, calculateTotalHours } from "@/utils/calculations";
+import { hourlyRates } from "@/utils/rates";
+import { IProps } from "./IProps";
 
-interface EditFormProps {
-  task: Task | null;
-  employee: Employee | null;
-  day: string | null;
-  onClose: () => void;
-  employees: Employee[];
-}
-
-const hourlyRates: Record<string, number> = {
-  Opening: 10.4,
-  Closing: 13.08,
-  Cashier: 13.2,
-  Stock: 12.0,
-  Truck: 13.07,
-};
-
-const calculateTotalHours = (
-  start: string,
-  end: string,
-  breakTime: string
-): string => {
-  const [startHour, startMinute] = start.split(":").map(Number);
-  const [endHour, endMinute] = end.split(":").map(Number);
-  const [breakHour, breakMinute] = breakTime.split(":").map(Number);
-  const startDate = new Date();
-  startDate.setHours(startHour, startMinute);
-  const endDate = new Date();
-  endDate.setHours(endHour, endMinute);
-  const breakDuration = breakHour * 60 + breakMinute;
-  const diffMinutes =
-    (endDate.getTime() - startDate.getTime()) / (1000 * 60) - breakDuration;
-  const hours = Math.floor(diffMinutes / 60);
-  const minutes = Math.floor(diffMinutes % 60);
-  return `${hours}h${minutes > 0 ? minutes + "m" : ""}`;
-};
-
-const calculateCost = (totalHours: string, hourlyRate: number): string => {
-  const [hours, minutes] = totalHours.split(/[hm]/).map(Number);
-  const totalMinutes = hours * 60 + (minutes || 0);
-  const totalHoursDecimal = totalMinutes / 60;
-  const cost = Math.round(totalHoursDecimal * hourlyRate);
-  return cost.toString();
-};
-
-const EditForm = ({ task, employee, day, onClose }: EditFormProps) => {
+const EditForm = ({ task, employee, day, onClose }: IProps) => {
   const [selectedEmployee, setSelectedEmployee] = useState<Employee | null>(
     employee
   );

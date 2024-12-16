@@ -1,20 +1,11 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Employee, Task } from "../../types/schedule";
-import { ShiftForm } from "./components/ShiftForm";
-import { LeaveForm } from "./components/LeaveForm";
-import EditForm from "./components/EditForm";
 
-interface ShiftModalProps {
-  task: Task | null;
-  employee: Employee | null;
-  day: string | null;
-  onClose: () => void;
-  employees: Employee[];
-  formType: string;
-  setFormType: (formType: "shift" | "leave" | "edit") => void;
-}
+import { ShiftForm } from "./components/ShiftForm/ShiftForm";
+import { LeaveForm } from "./components/LeaveForm/LeaveForm";
+import EditForm from "./components/EditForm/EditForm";
+import { IProps } from "./IProps";
 
 export const Modal = ({
   task,
@@ -24,7 +15,7 @@ export const Modal = ({
   employees,
   formType,
   setFormType,
-}: ShiftModalProps) => {
+}: IProps) => {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {

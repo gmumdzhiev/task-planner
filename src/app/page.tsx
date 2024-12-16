@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { DndContext, DragEndEvent } from "@dnd-kit/core";
-import { ScheduleGrid } from "./components/ScheduleGrid";
+import { ScheduleGrid } from "./components/ScheduleGrid/ScheduleGrid";
 import { scheduleData as initialScheduleData } from "./data/schedule";
 import { ScheduleData, Employee, Task } from "./types/schedule";
 import { Modal } from "./components/Modal/Modal";
@@ -134,7 +134,7 @@ const SchedulePage = () => {
 
   return (
     <main className="p-8 bg-gray-100">
-      <h1 className="text-2xl font-bold mb-4 text-gray-600">Schedule</h1>
+      <h1 className="text-xl md:text-2xl lg:text-3xl font-bold mb-4 text-gray-600">Schedule</h1>
       <DndContext onDragEnd={handleDragEnd}>
         <ScheduleGrid
           data={data}

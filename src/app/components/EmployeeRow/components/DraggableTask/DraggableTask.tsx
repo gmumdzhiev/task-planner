@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useDraggable } from "@dnd-kit/core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { ContextMenu } from "../../ContextMenu";
+import { ContextMenu } from "../../../ContextMenu/ContextMenu";
 import {
   faClock,
   faMoneyBill,
@@ -10,34 +10,8 @@ import {
   faPencil,
   faPaste,
 } from "@fortawesome/free-solid-svg-icons";
-import { Task, Employee } from "../../../types/schedule";
-
-interface DraggableTaskProps {
-  task: Task;
-  employee: Employee;
-  day: string | null;
-  employeeIndex: number;
-  openTaskId: string | null;
-  onContextMenuOpen: (taskId: string) => void;
-  onOpenModal: (
-    task: Task | null,
-    employee: Employee | null,
-    day: string | null,
-    formType: "shift" | "leave" | "edit"
-  ) => void;
-  onDeleteTask: (employeeIndex: number, taskId: string) => void;
-  onCopyTask: (task: Task) => void;
-  onPasteTask: (task: Task, day: string, employeeIndex: number) => void;
-  copiedTask: Task | null;        
-}
-
-const labelColorMap: { [key: string]: string } = {
-  Opening: "bg-orange-600",
-  Closing: "bg-rose-600",
-  Cashier: "bg-lime-600",
-  Stock: "bg-violet-900",
-  Truck: "bg-blue-700",
-};
+import { IProps } from "./IProps";
+import { labelColorMap } from "@/utils/colors";
 
 export const DraggableTask = ({
   task,
@@ -48,9 +22,9 @@ export const DraggableTask = ({
   onContextMenuOpen,
   onOpenModal,
   onDeleteTask,
-  onCopyTask,     
-  copiedTask,     
-}: DraggableTaskProps) => {
+  onCopyTask,
+  copiedTask,
+}: IProps) => {
   const { attributes, listeners, setNodeRef, transform } = useDraggable({
     id: `draggable-${employeeIndex}-${task.id}`,
   });
@@ -152,14 +126,20 @@ export const DraggableTask = ({
           }`}
       >
         {!labelDisplay && (
-          <span className="py-1 text-base font-semibold text-gray-700">
-            {task.startTime}-{task.endTime}
-          </span>
+          <div className="py-1 flex flex-col lg:flex-row">
+            <span className=" text-xs md:text-sm lg:text-base font-semibold text-gray-700">
+              {task.startTime}
+            </span>
+            -
+            <span className=" text-xs md:text-sm lg:text-base font-semibold text-gray-700">
+              {task.endTime}
+            </span>
+          </div>
         )}
 
-        <div className="py-1 flex items-center gap-2">
+        <div className="py-1 flex flex-col lg:flex-row items-start lg:items-center gap-2">
           {labelDisplay && (
-            <span className="block text-2xl font-bold text-gray-800">
+            <span className="block text-xl md:text-2xl lg:text-3xl font-bold text-gray-800">
               {labelDisplay.bigLetter}
             </span>
           )}
@@ -169,7 +149,7 @@ export const DraggableTask = ({
               icon={faClock}
               className="text-gray-500 icon-size"
             />
-            <span className="text-gray-500 text-xs font-medium">
+            <span className="text-xs md:text-sm lg:text-base text-gray-500 font-medium">
               {task.totalHours}
             </span>
           </div>
@@ -178,24 +158,24 @@ export const DraggableTask = ({
               icon={faMoneyBill}
               className="text-gray-500 icon-size"
             />
-            <span className="text-gray-500 text-xs font-medium">
+            <span className="text-xs md:text-sm lg:text-base text-gray-500 font-medium">
               {task.cost} €
             </span>
           </div>
         </div>
         {labelDisplay && (
-          <span className="py-1 block text-gray-500 text-xs font-medium">
+          <span className="py-1 block text-xs md:text-sm lg:text-base text-gray-500 font-medium">
             {labelDisplay.labelText}
           </span>
         )}
         {labelDisplay && (
-          <span className="py-1 block text-gray-500 text-xs font-medium">
+          <span className="py-1 block text-xs md:text-sm lg:text-base text-gray-500 font-medium">
             {task.startTime}-{task.endTime}
           </span>
         )}
         {!labelDisplay && (
           <span
-            className={`py-1 w-full text-xs font-semibold rounded-md shadow ${labelColorClass} text-gray-100 px-2 my-1`}
+            className={`py-1 w-full text-xs md:text-sm lg:text-base font-semibold rounded-md shadow ${labelColorClass} text-gray-100 px-2 my-1`}
           >
             {task.label}
           </span>

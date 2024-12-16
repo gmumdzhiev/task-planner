@@ -1,36 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { Employee, Task } from "../../../types/schedule";
-
-interface LeaveFormProps {
-  task: Task | null;
-  employee: Employee | null;
-  day: string | null;
-  onClose: () => void;
-  employees: Employee[];
-}
-
-const hourlyRates: Record<string, number> = {
-  Holiday: 15.0,
-  Recuperation: 13.0,
-};
-
-const calculateTotalHours = (start: string, end: string): string => {
-  const [startHour, startMinute] = start.split(":").map(Number);
-  const [endHour, endMinute] = end.split(":").map(Number);
-
-  const startDate = new Date();
-  startDate.setHours(startHour, startMinute);
-
-  const endDate = new Date();
-  endDate.setHours(endHour, endMinute);
-
-  const diffMinutes = (endDate.getTime() - startDate.getTime()) / (1000 * 60);
-
-  const hours = Math.floor(diffMinutes / 60);
-  const minutes = Math.floor(diffMinutes % 60);
-
-  return `${hours}h${minutes > 0 ? minutes + "m" : ""}`;
-};
+import { Employee, Task } from "../../../../types/schedule";
+import { calculateLeaveTotalHours } from "@/utils/calculations";
+import { hourlyLeaveRates } from "@/utils/rates";
+import { IProps } from "./IProps";
 
 export const LeaveForm = ({
   task,
@@ -38,7 +10,7 @@ export const LeaveForm = ({
   day,
   onClose,
   employees,
-}: LeaveFormProps) => {
+}: IProps) => {
   const [selectedEmployee, setSelectedEmployee] = useState<Employee | null>(
     employee
   );
@@ -73,8 +45,8 @@ export const LeaveForm = ({
 
   const handleSubmit = () => {
     if (selectedEmployee && day) {
-      const totalHours = calculateTotalHours(fromHour, toHour);
-      const hourlyRate = hourlyRates[leaveType];
+      const totalHours = calculateLeaveTotalHours(fromHour, toHour);
+      const hourlyRate = hourlyLeaveRates[leaveType];
       const cost = calculateCost(totalHours, hourlyRate);
       const newTask: Task = {
         id: new Date().getTime().toString(),

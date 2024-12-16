@@ -3,17 +3,9 @@
 import { useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPaste } from "@fortawesome/free-solid-svg-icons";
+import { IProps } from "./IProps";
 
-type PasteContextMenuProps = {
-  position: { x: number; y: number };
-  onPaste: (event: React.MouseEvent) => void;
-  onClose: () => void;
-};
-
-export const PasteContextMenu = ({
-  onPaste,
-  onClose,
-}: PasteContextMenuProps) => {
+export const PasteContextMenu = ({ onPaste, onClose }: IProps) => {
   useEffect(() => {
     const handleOutsideClick = (event: MouseEvent) => {
       event.stopPropagation();
