@@ -8,20 +8,33 @@ import { ScheduleData, Employee, Task } from "./types/schedule";
 import { Modal } from "./components/Modal/Modal";
 
 const SchedulePage = () => {
-  const [data, setData] = useState<ScheduleData>(() => {
-    const savedData = localStorage.getItem("scheduleData");
-    return savedData ? JSON.parse(savedData) : initialScheduleData;
-  });
+  const [data, setData] = useState<ScheduleData>(initialScheduleData);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalTask, setModalTask] = useState<Task | null>(null);
   const [modalEmployee, setModalEmployee] = useState<Employee | null>(null);
   const [modalDay, setModalDay] = useState<string | null>(null);
   const [form, setForm] = useState<"shift" | "leave" | "edit">("shift");
   const [copiedTask, setCopiedTask] = useState<Task | null>(null);
+  const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
-    localStorage.setItem("scheduleData", JSON.stringify(data));
-  }, [data]);
+    setIsClient(true);
+  }, []);
+
+  useEffect(() => {
+    if (isClient) {
+      const savedData = localStorage.getItem("scheduleData");
+      if (savedData) {
+        setData(JSON.parse(savedData));
+      }
+    }
+  }, [isClient]);
+
+  useEffect(() => {
+    if (isClient) {
+      localStorage.setItem("scheduleData", JSON.stringify(data));
+    }
+  }, [data, isClient]);
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
@@ -114,6 +127,10 @@ const SchedulePage = () => {
     ].tasks.filter((task) => task.id !== taskId);
     setData({ ...data, employees: updatedEmployees });
   };
+
+  if (!isClient) {
+    return null;
+  }
 
   return (
     <main className="p-8 bg-gray-100">
