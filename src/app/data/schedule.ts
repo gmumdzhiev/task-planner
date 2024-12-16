@@ -9,7 +9,7 @@ export const scheduleData: ScheduleData = {
       role: "Employee",
       tasks: [
         {
-          id: "1",
+          id: "alex1",
           startTime: "07:00",
           endTime: "15:00",
           label: "Cashier",
@@ -23,7 +23,7 @@ export const scheduleData: ScheduleData = {
           notCounted: false,
         },
         {
-          id: "2",
+          id: "alex2",
           startTime: "18:00",
           endTime: "01:00",
           label: "Closing",
@@ -37,7 +37,7 @@ export const scheduleData: ScheduleData = {
           notCounted: false,
         },
         {
-          id: "3",
+          id: "alex3",
           startTime: "07:00",
           endTime: "15:00",
           label: "Cashier",
@@ -51,7 +51,7 @@ export const scheduleData: ScheduleData = {
           notCounted: false,
         },
         {
-          id: "4",
+          id: "alex4",
           startTime: "18:00",
           endTime: "00:30",
           label: "Holiday",
@@ -65,7 +65,7 @@ export const scheduleData: ScheduleData = {
           notCounted: false,
         },
         {
-          id: "5",
+          id: "alex5",
           startTime: "07:00",
           endTime: "15:00",
           label: "Cashier",
@@ -79,7 +79,7 @@ export const scheduleData: ScheduleData = {
           notCounted: false,
         },
         {
-          id: "4",
+          id: "alex6",
           startTime: "18:00",
           endTime: "00:30",
           label: "Recuperation",
@@ -93,7 +93,7 @@ export const scheduleData: ScheduleData = {
           notCounted: false,
         },
         {
-          id: "5",
+          id: "alex7",
           startTime: "18:00",
           endTime: "01:00",
           label: "Closing",
@@ -114,7 +114,7 @@ export const scheduleData: ScheduleData = {
       role: "Employee",
       tasks: [
         {
-          id: "1",
+          id: "eloise1",
           startTime: "08:00",
           endTime: "17:00",
           totalHours: "8h30",
@@ -128,7 +128,7 @@ export const scheduleData: ScheduleData = {
           notCounted: false,
         },
         {
-          id: "2",
+          id: "eloise2",
           startTime: "",
           endTime: "",
           label: "Holiday",
@@ -142,7 +142,7 @@ export const scheduleData: ScheduleData = {
           notCounted: false,
         },
         {
-          id: "3",
+          id: "eloise3",
           startTime: "",
           endTime: "",
           label: "Holiday",
@@ -156,7 +156,7 @@ export const scheduleData: ScheduleData = {
           notCounted: false,
         },
         {
-          id: "4",
+          id: "eloise4",
           startTime: "",
           endTime: "",
           label: "Holiday",
@@ -177,7 +177,7 @@ export const scheduleData: ScheduleData = {
       role: "Employee",
       tasks: [
         {
-          id: "1",
+          id: "samuel1",
           startTime: "07:00",
           endTime: "15:00",
           label: "Truck",
@@ -191,7 +191,7 @@ export const scheduleData: ScheduleData = {
           notCounted: false,
         },
         {
-          id: "2",
+          id: "samuel2",
           startTime: "07:00",
           endTime: "15:00",
           label: "Truck",
@@ -205,7 +205,7 @@ export const scheduleData: ScheduleData = {
           notCounted: false,
         },
         {
-          id: "3",
+          id: "samuel3",
           startTime: "07:00",
           endTime: "15:00",
           label: "Truck",
@@ -219,7 +219,7 @@ export const scheduleData: ScheduleData = {
           notCounted: false,
         },
         {
-          id: "4",
+          id: "samuel4",
           startTime: "07:00",
           endTime: "15:00",
           label: "Truck",
@@ -240,7 +240,7 @@ export const scheduleData: ScheduleData = {
       role: "Student",
       tasks: [
         {
-          id: "1",
+          id: "camilleD1",
           startTime: "12:00",
           endTime: "20:00",
           label: "Closing",
@@ -254,7 +254,7 @@ export const scheduleData: ScheduleData = {
           notCounted: false,
         },
         {
-          id: "2",
+          id: "camilleD2",
           startTime: "12:00",
           endTime: "20:00",
           label: "Closing",
@@ -275,7 +275,7 @@ export const scheduleData: ScheduleData = {
       role: "Student",
       tasks: [
         {
-          id: "1",
+          id: "camilleE1",
           startTime: "07:00",
           endTime: "15:00",
           label: "Opening",

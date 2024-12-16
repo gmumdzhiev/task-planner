@@ -19,8 +19,6 @@ const SchedulePage = () => {
   const [form, setForm] = useState<"shift" | "leave" | "edit">("shift");
   const [copiedTask, setCopiedTask] = useState<Task | null>(null);
 
-  console.log("data", data);
-
   useEffect(() => {
     localStorage.setItem("scheduleData", JSON.stringify(data));
   }, [data]);

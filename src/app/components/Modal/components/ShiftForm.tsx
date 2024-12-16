@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { v4 as uuidv4 } from "uuid";
 import { Employee, Task } from "../../../types/schedule";
 
 interface ShiftFormProps {
@@ -97,7 +98,10 @@ export const ShiftForm = ({
     <div>
       <div className="mb-4"></div>
       <div className="mb-4">
-        <label className="block text-gray-700">Employee*</label>
+        <label className="block text-gray-700">
+          Employee
+          <span className="text-red-500">*</span>
+        </label>
         {task ? (
           <input
             type="text"
@@ -113,9 +117,9 @@ export const ShiftForm = ({
                 employees.find((emp) => emp.id === e.target.value) || null
               )
             }
-            className="w-full p-2 border rounded"
+            className="w-full p-2 border rounded bg-gray-100 text-gray-500"
           >
-            <option value="" disabled>
+            <option className="text-gray-500" value="" disabled>
               Select an employee
             </option>
             {employees.map((emp) => (
@@ -127,11 +131,14 @@ export const ShiftForm = ({
         )}
       </div>
       <div className="mb-4">
-        <label className="block text-gray-700">Label*</label>
+        <label className="block text-gray-700">
+          Label
+          <span className="text-red-500">*</span>
+        </label>
         <select
           value={label}
           onChange={(e) => setLabel(e.target.value)}
-          className="w-full p-2 border rounded"
+          className="w-full p-2 border rounded bg-gray-100 text-gray-500"
         >
           <option value="Opening">Opening</option>
           <option value="Closing">Closing</option>
@@ -146,7 +153,7 @@ export const ShiftForm = ({
           type="text"
           value={competences}
           onChange={(e) => setCompetences(e.target.value)}
-          className="w-full p-2 border rounded"
+          className="w-full p-2 border rounded bg-gray-100 text-gray-500"
         />
       </div>
       <div className="mb-4">
@@ -155,26 +162,32 @@ export const ShiftForm = ({
           type="text"
           value={attributes}
           onChange={(e) => setAttributes(e.target.value)}
-          className="w-full p-2 border rounded"
+          className="w-full p-2 border rounded bg-gray-100 text-gray-500"
         />
       </div>
       <div className="mb-4 flex justify-between">
         <div className="w-1/2 pr-2">
-          <label className="block text-gray-700">From*</label>
+          <label className="block text-gray-700">
+            From
+            <span className="text-red-500">*</span>
+          </label>
           <input
             type="time"
             value={fromHour}
             onChange={(e) => setFromHour(e.target.value)}
-            className="w-full p-2 border rounded"
+            className="w-full p-2 border rounded bg-gray-100 text-gray-500"
           />
         </div>
         <div className="w-1/2 pl-2">
-          <label className="block text-gray-700">To*</label>
+          <label className="block text-gray-700">
+            To
+            <span className="text-red-500">*</span>
+          </label>
           <input
             type="time"
             value={toHour}
             onChange={(e) => setToHour(e.target.value)}
-            className="w-full p-2 border rounded"
+            className="w-full p-2 border rounded bg-gray-100 text-gray-500"
           />
         </div>
       </div>
@@ -184,7 +197,7 @@ export const ShiftForm = ({
           type="time"
           value={breakTime}
           onChange={(e) => setBreakTime(e.target.value)}
-          className="w-full p-2 border rounded"
+          className="w-full p-2 border rounded bg-gray-100 text-gray-500"
         />
       </div>
       <div className="mb-4">
@@ -200,18 +213,18 @@ export const ShiftForm = ({
           </span>
         </label>
       </div>
-      <div className="flex justify-end gap-2">
+      <div className="flex w-full gap-2">
         <button
-          className="bg-red-500 text-white px-4 py-2 rounded"
+          className="w-full bg-red-500 text-white px-4 py-2 rounded"
           onClick={onClose}
         >
           Cancel
         </button>
         <button
-          className="bg-green-500 text-white px-4 py-2 rounded"
+          className="w-full bg-green-500 text-white px-4 py-2 rounded"
           onClick={handleSubmit}
         >
-          {task ? "Edit Shift" : "Create Shift"}
+          Create Shift
         </button>
       </div>
     </div>

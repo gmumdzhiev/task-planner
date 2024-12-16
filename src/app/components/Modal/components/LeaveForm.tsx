@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { v4 as uuidv4 } from "uuid";
 import { Employee, Task } from "../../../types/schedule";
 
 interface LeaveFormProps {
@@ -53,10 +54,17 @@ export const LeaveForm = ({
     setSelectedEmployee(employee);
   }, [employee]);
 
-  const calculateCost = (totalHours: string, hourlyRate: number): string => {
+  useEffect(() => {
     if (wholeDay) {
-      return "190";
+      setFromHour("");
+      setToHour("");
+    } else {
+      setFromHour(task ? task.startTime : "08:00");
+      setToHour(task ? task.endTime : "17:00");
     }
+  }, [wholeDay, task]);
+
+  const calculateCost = (totalHours: string, hourlyRate: number): string => {
     const [hoursPart, minutesPart] = totalHours.split(/[hm]/).map(Number);
     const totalMinutes = hoursPart * 60 + (minutesPart || 0);
     const totalHoursDecimal = totalMinutes / 60;
@@ -74,9 +82,9 @@ export const LeaveForm = ({
         startTime: fromHour,
         endTime: toHour,
         label: leaveType,
-        totalHours: totalHours,
+        totalHours: wholeDay ? "12h40" : totalHours,
         nonpbreak: "00:00",
-        cost: cost,
+        cost: wholeDay ? "190" : cost,
         day: day,
         type: "leave",
         competences: "",
@@ -159,15 +167,15 @@ export const LeaveForm = ({
           <span className="ml-2 text-gray-700">Whole day</span>
         </label>
       </div>
-      <div className="flex justify-end gap-2">
+      <div className="flex w-full justify-end gap-2">
         <button
-          className="bg-red-500 text-white px-4 py-2 rounded"
+          className="w-full bg-red-500 text-white px-4 py-2 rounded"
           onClick={onClose}
         >
           Cancel
         </button>
         <button
-          className="bg-green-500 text-white px-4 py-2 rounded"
+          className="w-full bg-green-500 text-white px-4 py-2 rounded"
           onClick={handleSubmit}
         >
           Create Leave

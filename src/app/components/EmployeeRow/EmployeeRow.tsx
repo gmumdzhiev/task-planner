@@ -49,9 +49,10 @@ export const EmployeeRow = ({
           <Image
             src={avatars[employeeIndex % avatars.length]}
             alt={`${employee.name}'s avatar`}
-            layout="fill"
-            objectFit="cover"
+            fill
+            sizes="32px"
             className="rounded-full"
+            style={{ objectFit: "cover" }}
           />
         </div>
         <div className="flex flex-col items-start">
