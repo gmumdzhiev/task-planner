@@ -1,6 +1,16 @@
 import React from "react";
+import Image from "next/image";
 import { Employee, Task } from "../../types/schedule";
 import { DroppableArea } from "./components/DroppableArea";
+
+// Avatar file paths
+const avatars = [
+  "/assets/avatar1.jpg",
+  "/assets/avatar2.jpg",
+  "/assets/avatar3.jpg",
+  "/assets/avatar4.jpg",
+  "/assets/avatar5.jpg",
+];
 
 interface EmployeeRowProps {
   employee: Employee;
@@ -34,11 +44,22 @@ export const EmployeeRow = ({
 }: EmployeeRowProps) => {
   return (
     <div className="grid grid-cols-8 border-b last:border-b-0 border-gray-200">
-      <div className="flex flex-col items-start justify-center p-4 bg-gray-100">
-        <span className="text-sm font-medium font-semibold text-gray-700">
-          {employee.name}
-        </span>
-        <span className="text-xs text-gray-500">{employee.role}</span>
+      <div className="flex items-center p-4 bg-gray-100">
+        <div className="w-8 h-8 relative mr-3">
+          <Image
+            src={avatars[employeeIndex % avatars.length]}
+            alt={`${employee.name}'s avatar`}
+            layout="fill"
+            objectFit="cover"
+            className="rounded-full"
+          />
+        </div>
+        <div className="flex flex-col items-start">
+          <span className="text-sm font-medium font-semibold text-gray-700">
+            {employee.name}
+          </span>
+          <span className="text-xs text-gray-500">{employee.role}</span>
+        </div>
       </div>
       {week.map((day, dayIndex) => (
         <DroppableArea

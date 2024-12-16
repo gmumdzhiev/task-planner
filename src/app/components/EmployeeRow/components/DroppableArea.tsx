@@ -72,10 +72,14 @@ export const DroppableArea = ({
     }
   };
 
+  const isWeekend = day === "Sat" || day === "Sun";
+
   return (
     <div
       ref={setNodeRef}
-      className="relative p-2 border border-gray-200 group hover:bg-gray-100"
+      className={`relative p-2 border border-gray-200 group hover:bg-gray-100 ${
+        isWeekend ? "bg-yellow-100" : ""
+      }`}
       onClick={(event) => handleOpenModal(event, "shift")}
       onContextMenu={handleContextMenu}
     >
