@@ -5,6 +5,9 @@ Welcome to **Task Planner**, your go-to app for managing tasks efficiently and e
 
 ---
 
+## Live version 🌍
+👉 https://gm-task-planner.netlify.app/
+
 ## Getting Started 🚀
 
 Follow these steps to get your Task Planner up and running:
