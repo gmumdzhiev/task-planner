@@ -17,6 +17,7 @@ interface DroppableAreaProps {
   ) => void;
   employee: Employee;
   day: string;
+  onDeleteTask: (employeeIndex: number, taskId: string) => void;
 }
 
 export const DroppableArea = ({
@@ -28,6 +29,7 @@ export const DroppableArea = ({
   onOpenModal,
   employee,
   day,
+  onDeleteTask
 }: DroppableAreaProps) => {
   const { setNodeRef } = useDroppable({
     id: `droppable-${employeeIndex}-${dayIndex}`,
@@ -62,6 +64,7 @@ export const DroppableArea = ({
           openTaskId={openTaskId}
           onContextMenuOpen={onContextMenuOpen}
           onOpenModal={onOpenModal}
+          onDeleteTask={onDeleteTask}
         />
       ))}
     </div>

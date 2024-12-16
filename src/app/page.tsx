@@ -78,11 +78,19 @@ const SchedulePage = () => {
     setIsModalOpen(false);
   };
 
+  const handleDeleteTask = (employeeIndex: number, taskId: string) => {
+    const updatedEmployees = [...data.employees];
+    updatedEmployees[employeeIndex].tasks = updatedEmployees[
+      employeeIndex
+    ].tasks.filter((task) => task.id !== taskId);
+    setData({ ...data, employees: updatedEmployees });
+  };
+
   return (
     <main className="p-8 bg-gray-100">
       <h1 className="text-2xl font-bold mb-4 text-gray-600">Schedule</h1>
       <DndContext onDragEnd={handleDragEnd}>
-        <ScheduleGrid data={data} onOpenModal={handleOpenModal} />
+        <ScheduleGrid data={data} onOpenModal={handleOpenModal} onDeleteTask={handleDeleteTask} />
       </DndContext>
       {isModalOpen && (
         <Modal

@@ -11,9 +11,10 @@ interface ScheduleGridProps {
     day: string | null,
     formType: "shift" | "leave" | "edit"
   ) => void;
+  onDeleteTask: (employeeIndex: number, taskId: string) => void;
 }
 
-export const ScheduleGrid = ({ data, onOpenModal }: ScheduleGridProps) => {
+export const ScheduleGrid = ({ data, onOpenModal, onDeleteTask }: ScheduleGridProps) => {
   const [openTaskId, setOpenTaskId] = useState<string | null>(null);
 
   const handleContextMenuOpen = (taskId: string) => {
@@ -38,6 +39,7 @@ export const ScheduleGrid = ({ data, onOpenModal }: ScheduleGridProps) => {
             onOpenModal={onOpenModal}
             openTaskId={openTaskId}
             onContextMenuOpen={handleContextMenuOpen}
+            onDeleteTask={onDeleteTask}
           />
         ))}
       </div>

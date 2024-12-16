@@ -14,6 +14,7 @@ interface EmployeeRowProps {
   ) => void;
   openTaskId: string | null;
   onContextMenuOpen: (taskId: string) => void;
+  onDeleteTask: (employeeIndex: number, taskId: string) => void;
 }
 
 export const EmployeeRow = ({
@@ -23,6 +24,7 @@ export const EmployeeRow = ({
   onOpenModal,
   openTaskId,
   onContextMenuOpen,
+  onDeleteTask,
 }: EmployeeRowProps) => {
   return (
     <div className="grid grid-cols-8 border-b last:border-b-0 border-gray-200">
@@ -43,6 +45,7 @@ export const EmployeeRow = ({
           onOpenModal={onOpenModal}
           employee={employee}
           day={day}
+          onDeleteTask={onDeleteTask}
         />
       ))}
     </div>

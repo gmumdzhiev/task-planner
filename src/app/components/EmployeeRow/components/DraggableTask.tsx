@@ -24,6 +24,7 @@ interface DraggableTaskProps {
     day: string | null,
     formType: "shift" | "leave" | "edit"
   ) => void;
+  onDeleteTask: (employeeIndex: number, taskId: string) => void;
 }
 
 const labelColorMap: { [key: string]: string } = {
@@ -42,6 +43,7 @@ export const DraggableTask = ({
   openTaskId,
   onContextMenuOpen,
   onOpenModal,
+  onDeleteTask,
 }: DraggableTaskProps) => {
   const { attributes, listeners, setNodeRef, transform } = useDraggable({
     id: `draggable-${employeeIndex}-${task.id}`,
@@ -94,7 +96,10 @@ export const DraggableTask = ({
     },
     {
       label: "Delete",
-      action: () => console.log("Deleted"),
+      action: (event: React.MouseEvent) => {
+        event.stopPropagation();
+        onDeleteTask(employeeIndex, task.id);
+      },
       icon: faTrashAlt,
       color: "danger",
     },
