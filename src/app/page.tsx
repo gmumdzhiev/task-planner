@@ -1,19 +1,26 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { DndContext, DragEndEvent } from "@dnd-kit/core";
 import { ScheduleGrid } from "./components/ScheduleGrid";
-import { scheduleData } from "./data/schedule";
+import { scheduleData as initialScheduleData } from "./data/schedule";
 import { ScheduleData, Employee, Task } from "./types/schedule";
 import { Modal } from "./components/Modal/Modal";
 
 const SchedulePage = () => {
-  const [data, setData] = useState<ScheduleData>(scheduleData);
+  const [data, setData] = useState<ScheduleData>(() => {
+    const savedData = localStorage.getItem('scheduleData');
+    return savedData ? JSON.parse(savedData) : initialScheduleData;
+  });
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalTask, setModalTask] = useState<Task | null>(null);
   const [modalEmployee, setModalEmployee] = useState<Employee | null>(null);
   const [modalDay, setModalDay] = useState<string | null>(null);
   const [form, setForm] = useState<"shift" | "leave" | "edit">("shift");
+
+  useEffect(() => {
+    localStorage.setItem('scheduleData', JSON.stringify(data));
+  }, [data]);
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
@@ -90,7 +97,11 @@ const SchedulePage = () => {
     <main className="p-8 bg-gray-100">
       <h1 className="text-2xl font-bold mb-4 text-gray-600">Schedule</h1>
       <DndContext onDragEnd={handleDragEnd}>
-        <ScheduleGrid data={data} onOpenModal={handleOpenModal} onDeleteTask={handleDeleteTask} />
+        <ScheduleGrid
+          data={data}
+          onOpenModal={handleOpenModal}
+          onDeleteTask={handleDeleteTask}
+        />
       </DndContext>
       {isModalOpen && (
         <Modal
