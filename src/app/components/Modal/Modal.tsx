@@ -29,8 +29,6 @@ export const Modal = ({
     setFormType(e.target.value as "shift" | "leave");
   };
 
-  console.log("Employee from modal", employee);
-
   const handleModalClick = (event: React.MouseEvent) => {
     event.stopPropagation();
   };

@@ -11,10 +11,20 @@ interface ScheduleGridProps {
     day: string | null,
     formType: "shift" | "leave" | "edit"
   ) => void;
+  onCopyTask: (task: Task) => void;
+  onPasteTask: (task: Task, day: string, employeeIndex: number) => void;
+  copiedTask: Task | null;
   onDeleteTask: (employeeIndex: number, taskId: string) => void;
 }
 
-export const ScheduleGrid = ({ data, onOpenModal, onDeleteTask }: ScheduleGridProps) => {
+export const ScheduleGrid = ({
+  data,
+  onOpenModal,
+  onDeleteTask,
+  onCopyTask,
+  onPasteTask,
+  copiedTask,
+}: ScheduleGridProps) => {
   const [openTaskId, setOpenTaskId] = useState<string | null>(null);
 
   const handleContextMenuOpen = (taskId: string) => {
@@ -39,6 +49,9 @@ export const ScheduleGrid = ({ data, onOpenModal, onDeleteTask }: ScheduleGridPr
             onOpenModal={onOpenModal}
             openTaskId={openTaskId}
             onContextMenuOpen={handleContextMenuOpen}
+            onCopyTask={onCopyTask}
+            onPasteTask={onPasteTask}
+            copiedTask={copiedTask}
             onDeleteTask={onDeleteTask}
           />
         ))}

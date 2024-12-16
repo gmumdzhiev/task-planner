@@ -9,7 +9,7 @@ import { Modal } from "./components/Modal/Modal";
 
 const SchedulePage = () => {
   const [data, setData] = useState<ScheduleData>(() => {
-    const savedData = localStorage.getItem('scheduleData');
+    const savedData = localStorage.getItem("scheduleData");
     return savedData ? JSON.parse(savedData) : initialScheduleData;
   });
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -17,9 +17,10 @@ const SchedulePage = () => {
   const [modalEmployee, setModalEmployee] = useState<Employee | null>(null);
   const [modalDay, setModalDay] = useState<string | null>(null);
   const [form, setForm] = useState<"shift" | "leave" | "edit">("shift");
+  const [copiedTask, setCopiedTask] = useState<Task | null>(null);
 
   useEffect(() => {
-    localStorage.setItem('scheduleData', JSON.stringify(data));
+    localStorage.setItem("scheduleData", JSON.stringify(data));
   }, [data]);
 
   const handleDragEnd = (event: DragEndEvent) => {
@@ -78,11 +79,32 @@ const SchedulePage = () => {
     setModalDay(day);
     setIsModalOpen(true);
     setForm(formType);
-    console.log("incoming formType", formType);
   };
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
+  };
+
+  const handleCopyTask = (task: Task) => {
+    setCopiedTask(task);
+  };
+  const handlePasteTask = (task: Task, day: string, employeeIndex: number) => {
+    const updatedEmployees = [...data.employees];
+    const employee = {
+      ...updatedEmployees[employeeIndex],
+    };
+    const newTask = {
+      ...task,
+      id: `${Date.now()}`,
+      day,
+    };
+    employee.tasks = [...employee.tasks, newTask];
+    updatedEmployees[employeeIndex] = employee;
+    setData({
+      ...data,
+      employees: updatedEmployees,
+    });
+    setCopiedTask(null);
   };
 
   const handleDeleteTask = (employeeIndex: number, taskId: string) => {
@@ -100,6 +122,9 @@ const SchedulePage = () => {
         <ScheduleGrid
           data={data}
           onOpenModal={handleOpenModal}
+          onCopyTask={handleCopyTask} 
+          onPasteTask={handlePasteTask} 
+          copiedTask={copiedTask}
           onDeleteTask={handleDeleteTask}
         />
       </DndContext>

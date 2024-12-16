@@ -8,6 +8,7 @@ import {
   faCopy,
   faTrashAlt,
   faPencil,
+  faPaste,
 } from "@fortawesome/free-solid-svg-icons";
 import { Task, Employee } from "../../../types/schedule";
 
@@ -25,6 +26,9 @@ interface DraggableTaskProps {
     formType: "shift" | "leave" | "edit"
   ) => void;
   onDeleteTask: (employeeIndex: number, taskId: string) => void;
+  onCopyTask: (task: Task) => void;
+  onPasteTask: (task: Task, day: string, employeeIndex: number) => void;
+  copiedTask: Task | null;        
 }
 
 const labelColorMap: { [key: string]: string } = {
@@ -44,6 +48,8 @@ export const DraggableTask = ({
   onContextMenuOpen,
   onOpenModal,
   onDeleteTask,
+  onCopyTask,     
+  copiedTask,     
 }: DraggableTaskProps) => {
   const { attributes, listeners, setNodeRef, transform } = useDraggable({
     id: `draggable-${employeeIndex}-${task.id}`,
@@ -81,7 +87,10 @@ export const DraggableTask = ({
   const menuOptions = [
     {
       label: "Copy",
-      action: () => console.log("Copied"),
+      action: (event: React.MouseEvent) => {
+        event.stopPropagation();
+        onCopyTask(task);
+      },
       icon: faCopy,
       color: "base",
     },
@@ -104,6 +113,17 @@ export const DraggableTask = ({
       color: "danger",
     },
   ];
+
+  if (copiedTask) {
+    menuOptions.push({
+      label: "Paste",
+      action: (event: React.MouseEvent) => {
+        event.stopPropagation();
+      },
+      icon: faPaste,
+      color: "base",
+    });
+  }
 
   const getLabelDisplay = () => {
     if (isHoliday) return { bigLetter: "H", labelText: "Holiday" };
