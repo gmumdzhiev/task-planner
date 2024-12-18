@@ -22,7 +22,7 @@ git clone https://github.com/your-username/task-planner.git
 cd task-planner
 ```
 
-## Step 2: Clone the Repository
+## Step 2: Install
 
 Install the necessary dependencies using your preferred package manager:
 
